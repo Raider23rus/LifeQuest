@@ -1,11 +1,17 @@
 (function () {
   const storageKey = "lifequest-theme";
   const root = document.documentElement;
+  const themes = ["light", "dark", "gray"];
+  const themeLabels = {
+    light: "☾ Тёмная тема",
+    dark: "◐ Серая тема",
+    gray: "☀ Светлая тема"
+  };
   let theme = "light";
 
   try {
     const savedTheme = window.localStorage.getItem(storageKey);
-    if (savedTheme === "light" || savedTheme === "dark") theme = savedTheme;
+    if (themes.includes(savedTheme)) theme = savedTheme;
   } catch (error) {
     console.warn("Не удалось загрузить сохранённую тему.", error);
   }
@@ -14,7 +20,7 @@
     const isDark = theme === "dark";
     root.dataset.theme = theme;
     document.querySelectorAll("[data-theme-toggle]").forEach(button => {
-      button.textContent = isDark ? "☀ Светлая тема" : "☾ Тёмная тема";
+      button.textContent = themeLabels[theme];
       button.setAttribute("aria-pressed", String(isDark));
     });
   }
@@ -25,7 +31,7 @@
     applyTheme();
     document.querySelectorAll("[data-theme-toggle]").forEach(button => {
       button.addEventListener("click", () => {
-        theme = theme === "dark" ? "light" : "dark";
+        theme = themes[(themes.indexOf(theme) + 1) % themes.length];
         applyTheme();
         try {
           window.localStorage.setItem(storageKey, theme);
