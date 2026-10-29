@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LifeQuest — семейная платформа для целей, квестов и финансовой осознанности.">
+  <title>LifeQuest — семейная система развития</title>
+
+  <!-- Guard ДО стилей и ДО app.js: нет сессии → мгновенный редирект -->
+  <script src="js/auth-guard.js"></script>
+  <noscript><meta http-equiv="refresh" content="0;url=index.html?auth=required"></noscript>
+
+  <script src="js/theme.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/family.css">
+  <link rel="stylesheet" href="css/profile-ip.css">
+  <link rel="stylesheet" href="css/life.css">
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="index.html"><span class="brand-mark">LQ</span><span>LifeQuest<small>Семейная система</small></span></a>
+      <div class="side-label">ОБЗОР</div>
+      <nav class="nav-list" aria-label="Основная навигация">
+        <button class="nav-item active" data-view="home"><span>⌂</span> Обзор</button>
+        <button class="nav-item" data-view="today"><span>◷</span> Сегодня</button>
+        <button class="nav-item" data-view="week"><span>▦</span> Неделя</button>
+        <button class="nav-item" data-view="month"><span>▦</span> Месяц</button>
+        <div class="side-label">ПЛАНИРОВАНИЕ</div>
+        <button class="nav-item" data-view="spheres"><span>◉</span> Сферы жизни</button>
+        <button class="nav-item" data-view="goals"><span>◎</span> Цели</button>
+        <button class="nav-item" data-view="projects"><span>▣</span> Проекты</button>
+        <button class="nav-item" data-view="tasks"><span>☷</span> Задачи</button>
+        <button class="nav-item" data-view="quests"><span>✦</span> Квесты</button>
+        <div class="side-label">ЖИЗНЬ</div>
+        <button class="nav-item" data-view="habits"><span>♧</span> Привычки</button>
+        <button class="nav-item" data-view="quit"><span>⊘</span> Отказ от привычек</button>
+        <button class="nav-item" data-view="care"><span>♧</span> Забота</button>
+        <button class="nav-item" data-view="sport"><span>♧</span> Спорт</button>
+        <button class="nav-item" data-view="familyTime"><span>♡</span> Семья и близкие</button>
+        <button class="nav-item" data-view="hobbies"><span>✧</span> Хобби</button>
+        <div class="side-label">RPG</div>
+        <button class="nav-item" data-view="character"><span>◉</span> Персонаж</button>
+        <button class="nav-item" data-view="levels"><span>♢</span> Уровни</button>
+        <button class="nav-item" data-view="achievements"><span>✧</span> Достижения</button>
+        <button class="nav-item" data-view="rewards"><span>♜</span> Магазин наград</button>
+        <div class="side-label">ДРУГОЕ</div>
+        <button class="nav-item" data-view="finance"><span>◈</span> Финансы</button>
+        <button class="nav-item" data-view="family"><span>♧</span> Управление семьёй</button>
+        <button class="nav-item hidden" id="profileNav" data-view="profile"><span>◉</span> Настройки профиля</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item admin-link hidden" id="adminNav" data-view="admin"><span>⚙</span> Админ-панель</button>
+        <div class="user-mini"><div class="avatar" id="miniAvatar">Г</div><div class="user-mini-text"><strong id="miniName">Гость</strong><small id="miniRole">Не авторизован</small></div><button class="icon-button" id="logoutBtn" title="Выйти" aria-label="Выйти">↗</button></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu icon-button" id="menuBtn" aria-label="Открыть меню">☰</button>
+        <div><div class="eyebrow" id="topEyebrow">СЕМЕЙНАЯ СИСТЕМА РАЗВИТИЯ</div><h1 id="pageTitle">Главная</h1></div>
+        <div class="top-actions"><span class="date-chip" id="todayDate"></span><button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false">☾ Тёмная тема</button><button class="primary-button" id="authOpenBtn">Войти / Регистрация</button></div>
+      </header>
+      <section id="pageContent" class="page-content" aria-live="polite"></section>
+      <footer class="footer">LifeQuest <span>•</span> MVP-прототип · Данные демонстрационные</footer>
+    </main>
+  </div>
+
+  <dialog id="authDialog" class="modal">
+    <form id="authForm" class="auth-card">
+      <button type="button" class="modal-close icon-button" id="closeAuth" aria-label="Закрыть">×</button>
+      <div class="brand modal-brand"><span class="brand-mark">LQ</span><span>LifeQuest<small>Твой путь начинается здесь</small></span></div>
+      <div class="auth-tabs"><button type="button" class="auth-tab active" data-auth-mode="login">Вход</button><button type="button" class="auth-tab" data-auth-mode="register">Регистрация</button></div>
+      <h2 id="authTitle">С возвращением!</h2><p class="muted" id="authSubtitle">Войди, чтобы продолжить свой путь.</p>
+      <label class="field-label" for="authName" id="nameLabel">Имя</label><input id="authName" name="name" autocomplete="name" placeholder="Как к тебе обращаться" class="field hidden">
+      <label class="field-label" for="authEmail">Электронная почта</label><input id="authEmail" name="email" type="email" required autocomplete="email" placeholder="you@example.com" class="field">
+      <label class="field-label" for="authPassword">Пароль</label><input id="authPassword" name="password" type="password" minlength="8" required autocomplete="current-password" placeholder="Не менее 8 символов" class="field">
+      <button class="text-button forgot-link" type="button" id="workspaceForgot">Забыли пароль?</button><button class="primary-button full-width" id="authSubmit" type="submit">Войти</button>
+      <p class="auth-note">Демо-режим: данные хранятся только в этом браузере. Не используй настоящий пароль.</p>
+      <p class="auth-error" id="authError" role="alert"></p>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
