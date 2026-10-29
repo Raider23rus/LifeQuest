@@ -2,7 +2,10 @@ import { questService } from "../services/quest.service.js";
 import { financeService } from "../services/finance.service.js";
 import { familyService, FAMILY_ROLES } from "../services/family.service.js";
 import { setPage, escapeHTML, formatMoney } from "../ui/render.js";
+<<<<<<< HEAD
 import { lifeService } from "../services/life.service.js";
+=======
+>>>>>>> 28e5a2dfa42c4f82a35452afa9491e5a6e18f9e3
 export function renderHome(user, users = []) {
   const quests = questService.list(), transactions = financeService.list();
   const family = user ? familyService.get(user.email) : null;
@@ -10,11 +13,14 @@ export function renderHome(user, users = []) {
   const balance = transactions.reduce((sum, t) => sum + Number(t.amount), 0);
   const name = user?.name?.split(" ")[0] || "друг";
   const streak = questService.activityStreak();
+<<<<<<< HEAD
   const lifeState = lifeService.state();
   const dayKey = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
   const todayTasks = lifeState.tasks.filter(task => task.date === dayKey);
   const activeProjects = lifeState.projects.filter(project => project.status === "active");
   const progression = lifeService.progress();
+=======
+>>>>>>> 28e5a2dfa42c4f82a35452afa9491e5a6e18f9e3
   const lastDigit = streak % 10, lastTwoDigits = streak % 100;
   const streakLabel = lastDigit === 1 && lastTwoDigits !== 11 ? "день подряд" : lastDigit >= 2 && lastDigit <= 4 && (lastTwoDigits < 12 || lastTwoDigits > 14) ? "дня подряд" : "дней подряд";
   setPage({ title: "Главная", html: `
@@ -25,6 +31,7 @@ export function renderHome(user, users = []) {
       <article class="stat-card"><div class="stat-top">Опыт семьи <span class="stat-icon">⚡</span></div><div class="stat-value">${quests.filter(q=>q.done).reduce((sum,q)=>sum+q.xp,0)} XP</div><div class="stat-foot">За выполненные задания</div></article>
       <article class="stat-card"><div class="stat-top">Серия активности <span class="stat-icon">♧</span></div><div class="stat-value">${streak} ${streakLabel}</div><div class="stat-foot">За выполнение квестов</div></article>
     </div>
+<<<<<<< HEAD
     <div class="life-home-grid">
       <section class="panel"><div class="panel-heading"><div><h3>Фокус дня</h3><p class="muted" style="margin:5px 0 0">Задачи, которые запланированы на сегодня.</p></div><button class="text-button" data-view="today">Все задачи →</button></div>
         ${todayTasks.length ? todayTasks.slice(0,3).map(task=>`<div class="quest-row"><div class="quest-symbol">${task.status==="done"?"✓":"○"}</div><div class="quest-info"><strong>${escapeHTML(task.title)}</strong><small>${task.xp} XP</small></div><span class="pill${task.status==="done"?"":" pending"}">${task.status==="done"?"Готово":"В работе"}</span></div>`).join("") : `<div class="life-empty">На сегодня пока нет задач. Добавь первую в план.</div>`}
@@ -34,6 +41,8 @@ export function renderHome(user, users = []) {
       </section>
       <section class="panel life-home-character"><div class="panel-heading"><h3>Персонаж</h3><button class="text-button" data-view="character">Открыть →</button></div><strong>${escapeHTML(progression.levelName)}</strong><p>${progression.xp} XP · ${progression.rewardPoints} RP · открыто достижений: ${progression.unlocked.length}</p><div class="progress-track"><div class="progress-fill" style="width:${Math.min(100,progression.xpInLevel/150*100)}%"></div></div></section>
     </div>
+=======
+>>>>>>> 28e5a2dfa42c4f82a35452afa9491e5a6e18f9e3
     <div class="content-grid"><div>
       <section class="panel"><div class="panel-heading"><h3>Твои квесты</h3><button class="text-button" data-view="quests">Все квесты →</button></div>
       ${quests.slice(0,4).map(q=>`<div class="quest-row"><div class="quest-symbol">${q.done?"✓":"✦"}</div><div class="quest-info"><strong>${escapeHTML(q.title)}</strong><small>${escapeHTML(q.category)} · ${q.xp} XP</small></div><span class="pill ${q.done?"":"pending"}">${q.done?"Готово":"В процессе"}</span></div>`).join("")}

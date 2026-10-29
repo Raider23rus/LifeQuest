@@ -11,11 +11,17 @@ import { renderFinance } from "./pages/finance.page.js";
 import { renderFamily } from "./pages/family.page.js";
 import { renderProfile } from "./pages/profile.page.js";
 import { renderAdmin } from "./pages/admin.page.js";
+<<<<<<< HEAD
 import { renderLifePage, adjustPlanner, setProjectFilter } from "./pages/life.page.js";
 import { lifeService } from "./services/life.service.js";
 
 let view = "home", authMode = "login", ipLookupId = 0;
 const lifeViews = new Set(["today","week","month","spheres","goals","projects","tasks","habits","quit","care","sport","familyTime","hobbies","character","levels","achievements","rewards"]);
+=======
+
+let view = "home", authMode = "login", ipLookupId = 0;
+const titles = {home:"Главная",quests:"Квесты и цели",finance:"Финансы",family:"Моя семья",admin:"Админ-панель"};
+>>>>>>> 28e5a2dfa42c4f82a35452afa9491e5a6e18f9e3
 function isValidIpAddress(value) {
  const parts=value.split(".");
  if(parts.length===4&&parts.every(part=>/^\d{1,3}$/.test(part)&&Number(part)<=255))return true;
@@ -57,7 +63,11 @@ function render() {
  if (view === "profile" && !user) view = "home";
  if (view === "admin" && user?.role !== "admin") view = "home";
  document.querySelectorAll("[data-view]").forEach(el=>el.classList.toggle("active", el.dataset.view===view && el.classList.contains("nav-item")));
+<<<<<<< HEAD
  ({home:()=>renderHome(user,authService.allUsers()),quests:()=>renderQuests(user),finance:()=>renderFinance(user),family:()=>renderFamily(user,authService.allUsers()),profile:()=>{renderProfile(user);loadPublicIp();},admin:()=>renderAdmin(user)}[view] || (lifeViews.has(view) ? (()=>renderLifePage(view)) : (()=>renderHome(user,authService.allUsers()))))();
+=======
+ ({home:()=>renderHome(user,authService.allUsers()),quests:()=>renderQuests(user),finance:()=>renderFinance(user),family:()=>renderFamily(user,authService.allUsers()),profile:()=>{renderProfile(user);loadPublicIp();},admin:()=>renderAdmin(user)}[view] || (()=>renderHome(user,authService.allUsers())))();
+>>>>>>> 28e5a2dfa42c4f82a35452afa9491e5a6e18f9e3
 }
 function navigate(next) { ipLookupId++;view=next; $("#sidebar").classList.remove("open"); render(); window.scrollTo({top:0,behavior:"smooth"}); }
 function openAuth(mode="login") { setAuthMode(mode); $("#authError").textContent=""; $("#authDialog").showModal(); }
@@ -76,6 +86,7 @@ $("#todayDate").textContent=new Intl.DateTimeFormat("ru-RU",{weekday:"short",day
 document.addEventListener("click", async event=>{
  const viewButton=event.target.closest("[data-view]");
  if(viewButton){event.preventDefault();navigate(viewButton.dataset.view);return;}
+<<<<<<< HEAD
  const openQuickTask=event.target.closest("[data-open-quick-task]");
  if(openQuickTask){const dialog=$("#quickTaskDialog");if(dialog){dialog.showModal();$("input[name='title']",dialog).focus();}return;}
  const closeQuickTask=event.target.closest("[data-close-quick-task]");
@@ -108,6 +119,8 @@ document.addEventListener("click", async event=>{
  if(purchaseReward){try{lifeService.purchase(purchaseReward.dataset.lifePurchase);render();toast("Награда обменена.");}catch(error){toast(error.message);}return;}
  const plannerButton=event.target.closest("[data-life-week], [data-life-month]");
  if(plannerButton){adjustPlanner(view,Number(plannerButton.dataset.lifeWeek ?? plannerButton.dataset.lifeMonth));render();return;}
+=======
+>>>>>>> 28e5a2dfa42c4f82a35452afa9491e5a6e18f9e3
  const refreshIp=event.target.closest("[data-refresh-ip]");
  if(refreshIp){loadPublicIp();return;}
  const openRegister=event.target.closest("[data-open-register]");
@@ -153,6 +166,7 @@ $("#pageContent").addEventListener("submit",async event=>{
  if(event.target.id==="familyCreateForm"){event.preventDefault();const data=new FormData(event.target);try{familyService.create({name:data.get("name"),creator:authService.current()});toast("Семья создана. Ты назначен взрослым.");}catch(error){toast(error.message);}return;}
  if(event.target.id==="familyAddMemberForm"){event.preventDefault();const data=new FormData(event.target);try{familyService.addMember({email:data.get("email"),role:data.get("role"),actorEmail:authService.current()?.email,users:authService.allUsers()});toast("Участник добавлен в семью.");}catch(error){toast(error.message);}return;}
  if(event.target.id==="questForm"){event.preventDefault();const data=new FormData(event.target);if(String(data.get("title")).trim()){try{questService.add(data.get("title"),data.get("category"),Number(data.get("xp")||20));renderQuests(authService.current());toast("Квест добавлен.");}catch(error){toast(error.message);}}}
+<<<<<<< HEAD
  if(event.target.matches("[data-life-quick-task]")){event.preventDefault();const form=event.target;const data=Object.fromEntries(new FormData(form));try{lifeService.add("tasks",data);$("#quickTaskDialog").close();render();toast("Задача добавлена.");}catch(error){toast(error.message);}}
  if(event.target.matches("[data-life-sphere-form]")){event.preventDefault();const form=event.target;const data=Object.fromEntries(new FormData(form));try{lifeService.add("spheres",data);$("#sphereDialog").close();render();toast("Сфера жизни создана.");}catch(error){toast(error.message);}}
  if(event.target.matches("[data-life-project-form]")){event.preventDefault();const form=event.target;const data=Object.fromEntries(new FormData(form));try{lifeService.add("projects",data);setProjectFilter("planned");$("#projectDialog").close();render();toast("Проект запланирован.");}catch(error){toast(error.message);}}
@@ -162,6 +176,11 @@ $("#pageContent").addEventListener("submit",async event=>{
 $("#pageContent").addEventListener("change",event=>{
  const scheduleToggle=event.target.closest("[data-toggle-life-schedule]");
  if(scheduleToggle){const optional=scheduleToggle.closest("form").querySelector(".life-optional-schedule");optional.hidden=!scheduleToggle.checked;optional.querySelectorAll("input,select").forEach(field=>{field.disabled=!scheduleToggle.checked;});return;}
+=======
+ if(event.target.id==="financeForm"){event.preventDefault();const data=new FormData(event.target);const amount=Number(data.get("amount"));if(!Number.isFinite(amount)||amount===0){toast("Укажи ненулевую сумму.");return;}try{financeService.add({title:data.get("title"),category:data.get("category"),amount});renderFinance(authService.current());toast("Операция сохранена.");}catch(error){toast(error.message);}}
+});
+$("#pageContent").addEventListener("change",event=>{
+>>>>>>> 28e5a2dfa42c4f82a35452afa9491e5a6e18f9e3
  if(event.target.id!=="avatarInput")return;
  const file=event.target.files?.[0];if(!file)return;
  const errorEl=$("#avatarError");errorEl.textContent="";
