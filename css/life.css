@@ -1,8 +1,13 @@
 .nav-list{flex:1;align-content:start;overflow-y:auto;min-height:0;padding-right:2px}
 .nav-list .side-label{padding:14px 12px 3px;color:var(--muted)}
 .nav-section-items{display:contents}
+.sidebar,.main-area{transition:width .38s cubic-bezier(.22,1,.36,1),margin-left .38s cubic-bezier(.22,1,.36,1),padding .38s cubic-bezier(.22,1,.36,1)}
+.sidebar-bottom>.nav-item{width:100%;transition:width .38s cubic-bezier(.22,1,.36,1),gap .28s ease,padding .28s ease,background-color .18s ease,color .18s ease}
 .app-shell.sidebar-collapsed .sidebar-bottom>.nav-item{width:38px}
-.sidebar,.main-area{transition:width 2.45s cubic-bezier(.22,1,.36,1),margin-left 2.45s cubic-bezier(.22,1,.36,1),padding 2.45s cubic-bezier(.22,1,.36,1)}
+.nav-item{transition:background-color .18s ease,color .18s ease,transform .24s ease,gap .28s ease,padding .28s ease,font-size .28s ease}
+.nav-item:hover{transform:translateX(2px)}
+.nav-item span{transition:transform .24s ease}
+.nav-item:hover span{transform:scale(1.08)}
 .admin-user-actions{display:flex;gap:6px;flex-wrap:wrap}
 .admin-user-filters{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .admin-user-filters label{display:grid;gap:6px;color:var(--muted);font-size:11px;font-weight:700}
@@ -21,7 +26,7 @@
 .app-shell.sidebar-collapsed .nav-item span{flex:none}
 .app-shell.sidebar-collapsed .user-mini{justify-content:center;padding:18px 0 0}
 @media(min-width:761px){.app-shell.sidebar-collapsed .main-area{width:calc(100% - 72px);margin-left:72px}}
-@media(prefers-reduced-motion:reduce){.sidebar,.main-area{transition:none}}
+@media(prefers-reduced-motion:reduce){.sidebar,.main-area,.sidebar-bottom>.nav-item,.nav-item,.nav-item span{transition:none}.nav-item:hover,.nav-item:hover span{transform:none}}
 @media(max-width:520px){.admin-user-search,.admin-user-role-filter{flex:1 1 100%}.admin-user-count{margin-left:0;padding-bottom:0}}
 .life-home-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 20px}
 .life-home-grid .panel{margin:0}
