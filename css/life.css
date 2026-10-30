@@ -1,6 +1,7 @@
 .nav-list{flex:1;align-content:start;overflow-y:auto;min-height:0;padding-right:2px}
 .nav-list .side-label{padding:14px 12px 3px;color:var(--muted)}
 .nav-section-items{display:contents}
+.app-shell.sidebar-collapsed .sidebar-bottom>.nav-item{width:38px}
 .sidebar,.main-area{transition:width 2.45s cubic-bezier(.22,1,.36,1),margin-left 2.45s cubic-bezier(.22,1,.36,1),padding 2.45s cubic-bezier(.22,1,.36,1)}
 .admin-user-actions{display:flex;gap:6px;flex-wrap:wrap}
 .admin-user-filters{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:14px}
