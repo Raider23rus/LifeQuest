@@ -30,7 +30,7 @@ form.addEventListener('submit', async event => {
   const data = new FormData(form), email = String(data.get('email') || '').trim();
   try {
     if (mode === 'register') {
-      const user = await authService.register({ name: data.get('name'), email, password: String(data.get('password') || '') });
+      await authService.register({ name: data.get('name'), email, password: String(data.get('password') || '') });
       location.href = 'workspace.html';
     } else if (mode === 'login') {
       await authService.login({ email, password: String(data.get('password') || '') });

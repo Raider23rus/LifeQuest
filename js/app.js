@@ -16,6 +16,29 @@ import { lifeService } from "./services/life.service.js";
 
 let view = "home", authMode = "login", ipLookupId = 0;
 const lifeViews = new Set(["today","week","month","spheres","goals","projects","tasks","habits","quit","care","sport","familyTime","hobbies","character","levels","achievements","rewards"]);
+const sidebar=$("#sidebar"),appShell=$("#app"),desktopSidebar=window.matchMedia("(min-width: 761px)");
+function setSidebarCollapsed(collapsed) {
+ appShell.classList.toggle("sidebar-collapsed",collapsed);
+ sidebar.querySelectorAll(".nav-item[data-view]").forEach(item=>{
+  if(collapsed){
+   item.dataset.sidebarTitle=item.title;
+   item.title=item.textContent.replace(item.querySelector("span")?.textContent||"","").trim();
+  }else{
+   item.title=item.dataset.sidebarTitle||"";
+   delete item.dataset.sidebarTitle;
+  }
+ });
+}
+setSidebarCollapsed(desktopSidebar.matches);
+sidebar.addEventListener("mouseenter",()=>{if(desktopSidebar.matches)setSidebarCollapsed(false);});
+sidebar.addEventListener("mouseleave",()=>{if(desktopSidebar.matches)setSidebarCollapsed(true);});
+sidebar.addEventListener("focusin",()=>{if(desktopSidebar.matches)setSidebarCollapsed(false);});
+sidebar.addEventListener("focusout",event=>{
+ if(desktopSidebar.matches&&!sidebar.contains(event.relatedTarget))setSidebarCollapsed(true);
+});
+desktopSidebar.addEventListener("change",event=>{
+ setSidebarCollapsed(event.matches&&!sidebar.matches(":hover")&&!sidebar.contains(document.activeElement));
+});
 function isValidIpAddress(value) {
  const parts=value.split(".");
  if(parts.length===4&&parts.every(part=>/^\d{1,3}$/.test(part)&&Number(part)<=255))return true;
@@ -57,7 +80,7 @@ function render() {
  if (view === "profile" && !user) view = "home";
  if (view === "admin" && user?.role !== "admin") view = "home";
  document.querySelectorAll("[data-view]").forEach(el=>el.classList.toggle("active", el.dataset.view===view && el.classList.contains("nav-item")));
- ({home:()=>renderHome(user,authService.allUsers()),quests:()=>renderQuests(user),finance:()=>renderFinance(user),family:()=>renderFamily(user,authService.allUsers()),profile:()=>{renderProfile(user);loadPublicIp();},admin:()=>renderAdmin(user)}[view] || (lifeViews.has(view) ? (()=>renderLifePage(view)) : (()=>renderHome(user,authService.allUsers()))))();
+ ({home:()=>renderHome(user,authService.allUsers()),quests:()=>renderQuests(user),finance:()=>renderFinance(),family:()=>renderFamily(user,authService.allUsers()),profile:()=>{renderProfile(user);loadPublicIp();},admin:()=>renderAdmin(user)}[view] || (lifeViews.has(view) ? (()=>renderLifePage(view)) : (()=>renderHome(user,authService.allUsers()))))();
 }
 function navigate(next) { ipLookupId++;view=next; $("#sidebar").classList.remove("open"); render(); window.scrollTo({top:0,behavior:"smooth"}); }
 function openAuth(mode="login") { setAuthMode(mode); $("#authError").textContent=""; $("#authDialog").showModal(); }
@@ -121,9 +144,9 @@ document.addEventListener("click", async event=>{
  const editQuest=event.target.closest("[data-edit-quest]");
  if(editQuest){if(authService.current()?.role!=="admin"){toast("Недостаточно прав.");return;}const q=questService.list().find(item=>item.id===editQuest.dataset.editQuest);if(!q)return;const title=prompt("Название квеста:",q.title);if(title===null)return;const category=prompt("Категория:",q.category);if(category===null)return;const xp=prompt("Опыт XP:",String(q.xp));if(xp===null)return;try{questService.update(q.id,{title,category,xp:Number(xp)});renderQuests(authService.current());toast("Квест изменён.");}catch(error){toast(error.message);}return;}
  const deleteFinance=event.target.closest("[data-delete-finance]");
- if(deleteFinance){if(confirm("Удалить финансовую операцию?")){try{financeService.remove(deleteFinance.dataset.deleteFinance);renderFinance(authService.current());toast("Операция удалена.");}catch(error){toast(error.message);}}return;}
+ if(deleteFinance){if(confirm("Удалить финансовую операцию?")){try{financeService.remove(deleteFinance.dataset.deleteFinance);renderFinance();toast("Операция удалена.");}catch(error){toast(error.message);}}return;}
  const editFinance=event.target.closest("[data-edit-finance]");
- if(editFinance){const item=financeService.list().find(t=>t.id===editFinance.dataset.editFinance);if(!item){toast("Операция не найдена.");return;}const title=prompt("Описание операции:",item.title);if(title===null)return;const category=prompt("Категория:",item.category);if(category===null)return;const amount=prompt("Сумма (доход +, расход −):",String(item.amount));if(amount===null)return;try{financeService.update(item.id,{title,category,amount:Number(amount)});renderFinance(authService.current());toast("Финансовая операция изменена.");}catch(error){toast(error.message);}return;}
+ if(editFinance){const item=financeService.list().find(t=>t.id===editFinance.dataset.editFinance);if(!item){toast("Операция не найдена.");return;}const title=prompt("Описание операции:",item.title);if(title===null)return;const category=prompt("Категория:",item.category);if(category===null)return;const amount=prompt("Сумма (доход +, расход −):",String(item.amount));if(amount===null)return;try{financeService.update(item.id,{title,category,amount:Number(amount)});renderFinance();toast("Финансовая операция изменена.");}catch(error){toast(error.message);}return;}
  const roleButton=event.target.closest("[data-role-email]");
  if(roleButton){try{await authService.setRole(roleButton.dataset.roleEmail,roleButton.dataset.roleNext);render();toast("Роль пользователя обновлена.");}catch(error){toast(error.message);}return;}
  const removeFamilyMember=event.target.closest("[data-remove-family-member]");
@@ -157,7 +180,7 @@ $("#pageContent").addEventListener("submit",async event=>{
  if(event.target.matches("[data-life-sphere-form]")){event.preventDefault();const form=event.target;const data=Object.fromEntries(new FormData(form));try{lifeService.add("spheres",data);$("#sphereDialog").close();render();toast("Сфера жизни создана.");}catch(error){toast(error.message);}}
  if(event.target.matches("[data-life-project-form]")){event.preventDefault();const form=event.target;const data=Object.fromEntries(new FormData(form));try{lifeService.add("projects",data);setProjectFilter("planned");$("#projectDialog").close();render();toast("Проект запланирован.");}catch(error){toast(error.message);}}
  if(event.target.matches("[data-life-form]")){event.preventDefault();const form=event.target;const collection=form.dataset.lifeForm;const data=Object.fromEntries(new FormData(form));try{lifeService.add(collection,data);$("#lifeFormDialog")?.close();render();toast(collection==="habits"?"Привычка сохранена.":collection==="quit"?"Цель отказа сохранена.":collection==="care"?"Объект заботы создан.":collection==="sport"?"Активность создана.":collection==="familyTime"?"Семейное дело создано.":collection==="hobbies"?"Хобби создано.":collection==="rewards"?"Награда создана.":"Запись добавлена.");}catch(error){toast(error.message);}}
- if(event.target.id==="financeForm"){event.preventDefault();const data=new FormData(event.target);const amount=Number(data.get("amount"));if(!Number.isFinite(amount)||amount===0){toast("Укажи ненулевую сумму.");return;}try{financeService.add({title:data.get("title"),category:data.get("category"),amount});renderFinance(authService.current());toast("Операция сохранена.");}catch(error){toast(error.message);}}
+ if(event.target.id==="financeForm"){event.preventDefault();const data=new FormData(event.target);const amount=Number(data.get("amount"));if(!Number.isFinite(amount)||amount===0){toast("Укажи ненулевую сумму.");return;}try{financeService.add({title:data.get("title"),category:data.get("category"),amount});renderFinance();toast("Операция сохранена.");}catch(error){toast(error.message);}}
 });
 $("#pageContent").addEventListener("change",event=>{
  const scheduleToggle=event.target.closest("[data-toggle-life-schedule]");

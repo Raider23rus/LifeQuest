@@ -20,34 +20,44 @@
   <div id="app" class="app-shell">
     <aside class="sidebar" id="sidebar">
       <a class="brand" href="index.html"><span class="brand-mark">LQ</span><span>LifeQuest<small>Семейная система</small></span></a>
-      <div class="side-label">ОБЗОР</div>
       <nav class="nav-list" aria-label="Основная навигация">
-        <button class="nav-item active" data-view="home"><span>⌂</span> Главная</button>
-        <button class="nav-item" data-view="today"><span>◷</span> Сегодня</button>
-        <button class="nav-item" data-view="week"><span>▦</span> Неделя</button>
-        <button class="nav-item" data-view="month"><span>▦</span> Месяц</button>
+        <div class="side-label">ОБЗОР</div>
+        <div class="nav-section-items" id="overviewNavItems">
+          <button class="nav-item active" data-view="home"><span>⌂</span> Главная</button>
+          <button class="nav-item" data-view="today"><span>◷</span> Сегодня</button>
+          <button class="nav-item" data-view="week"><span>▦</span> Неделя</button>
+          <button class="nav-item" data-view="month"><span>▦</span> Месяц</button>
+        </div>
         <div class="side-label">ПЛАНИРОВАНИЕ</div>
-        <button class="nav-item" data-view="spheres"><span>◉</span> Сферы жизни</button>
-        <button class="nav-item" data-view="goals"><span>◎</span> Цели</button>
-        <button class="nav-item" data-view="projects"><span>▣</span> Проекты</button>
-        <button class="nav-item" data-view="tasks"><span>☷</span> Задачи</button>
-        <button class="nav-item" data-view="quests"><span>✦</span> Квесты</button>
+        <div class="nav-section-items" id="planningNavItems">
+          <button class="nav-item" data-view="spheres"><span>◉</span> Сферы жизни</button>
+          <button class="nav-item" data-view="goals"><span>◎</span> Цели</button>
+          <button class="nav-item" data-view="projects"><span>▣</span> Проекты</button>
+          <button class="nav-item" data-view="tasks"><span>☷</span> Задачи</button>
+          <button class="nav-item" data-view="quests"><span>✦</span> Квесты</button>
+        </div>
         <div class="side-label">ЖИЗНЬ</div>
-        <button class="nav-item" data-view="habits"><span>♧</span> Привычки</button>
-        <button class="nav-item" data-view="quit"><span>⊘</span> Отказ от привычек</button>
-        <button class="nav-item" data-view="care"><span>♧</span> Забота</button>
-        <button class="nav-item" data-view="sport"><span>♧</span> Спорт</button>
-        <button class="nav-item" data-view="familyTime"><span>♡</span> Семья и близкие</button>
-        <button class="nav-item" data-view="hobbies"><span>✧</span> Хобби</button>
+        <div class="nav-section-items" id="lifeNavItems">
+          <button class="nav-item" data-view="habits"><span>♧</span> Привычки</button>
+          <button class="nav-item" data-view="quit"><span>⊘</span> Отказ от привычек</button>
+          <button class="nav-item" data-view="care"><span>♧</span> Забота</button>
+          <button class="nav-item" data-view="sport"><span>♧</span> Спорт</button>
+          <button class="nav-item" data-view="familyTime"><span>♡</span> Семья и близкие</button>
+          <button class="nav-item" data-view="hobbies"><span>✧</span> Хобби</button>
+        </div>
         <div class="side-label">RPG</div>
-        <button class="nav-item" data-view="character"><span>◉</span> Персонаж</button>
-        <button class="nav-item" data-view="levels"><span>♢</span> Уровни</button>
-        <button class="nav-item" data-view="achievements"><span>✧</span> Достижения</button>
-        <button class="nav-item" data-view="rewards"><span>♜</span> Магазин наград</button>
+        <div class="nav-section-items" id="rpgNavItems">
+          <button class="nav-item" data-view="character"><span>◉</span> Персонаж</button>
+          <button class="nav-item" data-view="levels"><span>♢</span> Уровни</button>
+          <button class="nav-item" data-view="achievements"><span>✧</span> Достижения</button>
+          <button class="nav-item" data-view="rewards"><span>♜</span> Магазин наград</button>
+        </div>
         <div class="side-label">ДРУГОЕ</div>
-        <button class="nav-item" data-view="finance"><span>◈</span> Финансы</button>
-        <button class="nav-item" data-view="family"><span>♧</span> Управление семьёй</button>
-        <button class="nav-item hidden" id="profileNav" data-view="profile"><span>◉</span> Настройки профиля</button>
+        <div class="nav-section-items" id="otherNavItems">
+          <button class="nav-item" data-view="finance"><span>◈</span> Финансы</button>
+          <button class="nav-item" data-view="family"><span>♧</span> Управление семьёй</button>
+          <button class="nav-item hidden" id="profileNav" data-view="profile"><span>◉</span> Настройки профиля</button>
+        </div>
       </nav>
       <div class="sidebar-bottom">
         <button class="nav-item admin-link hidden" id="adminNav" data-view="admin"><span>⚙</span> Админ-панель</button>

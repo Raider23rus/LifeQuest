@@ -1,5 +1,17 @@
 .nav-list{flex:1;align-content:start;overflow-y:auto;min-height:0;padding-right:2px}
 .nav-list .side-label{padding:14px 12px 3px;color:var(--muted)}
+.nav-section-items{display:contents}
+.sidebar,.main-area{transition:width .2s ease,margin-left .2s ease}
+.app-shell.sidebar-collapsed .sidebar{width:72px;padding:24px 8px 16px}
+.app-shell.sidebar-collapsed .brand{justify-content:center;padding:0 0 26px}
+.app-shell.sidebar-collapsed .brand>span:not(.brand-mark),
+.app-shell.sidebar-collapsed .side-label,
+.app-shell.sidebar-collapsed .user-mini-text,
+.app-shell.sidebar-collapsed .user-mini>.icon-button{display:none}
+.app-shell.sidebar-collapsed .nav-item{justify-content:center;gap:0;padding:10px 0;font-size:0}
+.app-shell.sidebar-collapsed .nav-item span{flex:none}
+.app-shell.sidebar-collapsed .user-mini{justify-content:center;padding:18px 0 0}
+@media(min-width:761px){.app-shell.sidebar-collapsed .main-area{width:calc(100% - 72px);margin-left:72px}}
 .life-home-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 20px}
 .life-home-grid .panel{margin:0}
 .life-home-grid .panel-heading{margin-bottom:12px}

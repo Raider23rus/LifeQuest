@@ -1,4 +1,3 @@
-import { authService } from "../services/auth.service.js";
 import { setPage, escapeHTML } from "../ui/render.js";
 
 export function renderProfile(user) {

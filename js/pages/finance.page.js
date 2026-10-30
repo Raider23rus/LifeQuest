@@ -1,7 +1,6 @@
 import { financeService } from "../services/finance.service.js";
 import { setPage, escapeHTML, formatMoney, formatDate } from "../ui/render.js";
-export function renderFinance(user) {
- const isAdmin = user?.role === "admin";
+export function renderFinance() {
  const items=financeService.list(), income=items.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0), expenses=items.filter(t=>t.amount<0).reduce((s,t)=>s+Math.abs(t.amount),0);
  setPage({title:"Финансовый хаб",html:`<div class="section-intro"><h2>Учёт доходов и расходов.</h2></div>
  <div class="stats-grid"><article class="stat-card"><div class="stat-top">Доходы <span class="stat-icon">↗</span></div><div class="stat-value">${formatMoney(income)}</div><div class="stat-foot">Все записи с плюсом</div></article><article class="stat-card"><div class="stat-top">Расходы <span class="stat-icon">↘</span></div><div class="stat-value">${formatMoney(expenses)}</div><div class="stat-foot">Все записи с минусом</div></article><article class="stat-card"><div class="stat-top">Денежный поток <span class="stat-icon">◈</span></div><div class="stat-value">${formatMoney(income-expenses)}</div><div class="stat-foot">Доходы минус расходы</div></article><article class="stat-card"><div class="stat-top">Операций <span class="stat-icon">≡</span></div><div class="stat-value">${items.length}</div><div class="stat-foot">Сохранено в браузере</div></article></div>

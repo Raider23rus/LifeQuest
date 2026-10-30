@@ -1,5 +1,5 @@
 import { authService } from "../services/auth.service.js";
-import { setPage, escapeHTML, formatDate, toast } from "../ui/render.js";
+import { setPage, escapeHTML } from "../ui/render.js";
 export function renderAdmin(user) {
  if (user?.role !== "admin") { setPage({title:"Доступ запрещён",html:`<section class="panel empty-state"><strong>У этой страницы ограниченный доступ</strong>Войдите под учётной записью администратора.</section>`}); return; }
  const users=authService.allUsers();
