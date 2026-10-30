@@ -24,7 +24,7 @@ export function renderProfile(user) {
     title: "Мой профиль",
     eyebrow: "АККАУНТ И БЕЗОПАСНОСТЬ",
     html: `
-      <div class="section-intro">
+      <div class="section-intro profile-settings-intro">
         <h2>Настрой свой профиль</h2>
         <p>Измени имя, email, фото и пароль. Все данные хранятся в этом браузере — это демо-прототип.</p>
       </div>
@@ -35,11 +35,13 @@ export function renderProfile(user) {
           <div class="profile-avatar-block">
             ${avatar}
             <div class="profile-avatar-actions">
-              <label class="primary-button file-button">
-                Загрузить фото
-                <input type="file" id="avatarInput" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
-              </label>
-              <button type="button" class="table-action danger-action" id="avatarReset">Удалить фото</button>
+              <div class="profile-avatar-button-group">
+                <label class="primary-button file-button">
+                  Загрузить фото
+                  <input type="file" id="avatarInput" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+                </label>
+                <button type="button" class="table-action danger-action" id="avatarReset">Удалить фото</button>
+              </div>
               <p class="muted" style="font-size:10px;margin:8px 0 0">PNG, JPG, WEBP или GIF · до 600 КБ</p>
             </div>
           </div>
@@ -88,12 +90,13 @@ export function renderProfile(user) {
       <section class="panel profile-ip-panel">
         <div class="panel-heading"><h3>Мой публичный IP</h3></div>
         <div class="profile-ip-row">
-          <strong id="profileIpValue" role="status" aria-live="polite">Нажми «Обновить IP»</strong>
-          <button class="primary-button" type="button" data-refresh-ip>Обновить IP</button>
+          <strong id="profileIpValue" role="status" aria-live="polite">IP обновляется автоматически</strong>
+          <button class="primary-button" id="profileLogoutBtn" type="button">Выйти из аккаунта</button>
         </div>
         <p class="muted">Адрес загружается с сервиса 2ip.io и не сохраняется сайтом. Сервис 2ip.io получает ваш IP при запросе.</p>
         <p class="auth-error" id="profileIpError" role="alert"></p>
       </section>
+
     `
   });
 }

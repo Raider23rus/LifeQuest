@@ -54,13 +54,25 @@ python -m http.server 8000
 index.html
 css/styles.css
 js/
-  app.js
+  app.js                    # точка входа рабочего пространства
+  auth-guard.js             # проверка сессии до показа рабочего пространства
   config.js
+  landing.js                # публичная главная страница
+  register.js               # вход, регистрация и восстановление пароля
+  theme.js                  # переключение темы
+  app/
+    runtime.js              # навигация, состояние и отображение страниц
+    workspace.js            # запуск приложения и подписки на события
+    events/
+      admin-users.js         # фильтры списка пользователей
+      click.js               # обработчики действий
+      forms.js               # обработчики форм
   core/
     events.js
     storage.js
   services/
     auth.service.js
+    family.service.js
     quest.service.js
     finance.service.js
     life.service.js
@@ -68,14 +80,21 @@ js/
     render.js
   pages/
     home.page.js
-    life.page.js
+    life.page.js             # фасад для разделов «Жизнь»
+    life/
+      shared.js              # общие данные и форматирование
+      planner.page.js        # сегодня, неделя и месяц
+      collections.page.js    # сферы, цели, задачи и другие коллекции
+      dialogs.page.js        # формы планирования и повторений
+      progression.page.js    # персонаж, уровни и достижения
     quests.page.js
     finance.page.js
     family.page.js
+    profile.page.js
     admin.page.js
 ```
 
-Каждая страница и бизнес-функция изолирована в собственном модуле. `app.js` отвечает за маршрутизацию и связывает события между модулями.
+JavaScript использует ES-модули на всех страницах. `app.js` запускает рабочее пространство, `app/` разделяет состояние и обработчики пользовательских событий, а `pages/`, `services/`, `core/` и `ui/` отвечают за интерфейс страниц, бизнес-логику, общие механизмы и отображение соответственно. `life.page.js` сохраняет прежний интерфейс для маршрутизации и передаёт рендеринг специализированным модулям `pages/life/`.
 
 
 ## Права администратора

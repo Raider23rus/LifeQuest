@@ -3,6 +3,7 @@ import { storage } from "../core/storage.js";
 import { events } from "../core/events.js";
 
 const normalizeEmail = value => value.trim().toLowerCase();
+const isValidEmail = value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 function splitName(value = "") {
   const [firstName = "", ...surnameParts] = String(value).trim().split(/\s+/);
   return { firstName, surname: surnameParts.join(" ") };
@@ -40,8 +41,11 @@ export const authService = {
   allUsers() { return readUsers().map(safeUser); },
 
   async register({ name, email, password }) {
-    name = name.trim(); email = normalizeEmail(email);
+    name = String(name ?? "").trim();
+    email = normalizeEmail(String(email ?? ""));
+    password = String(password ?? "");
     if (name.length < 2) throw new Error("Имя должно содержать минимум 2 символа.");
+    if (!isValidEmail(email)) throw new Error("Введи корректный email, например name@example.com.");
     if (password.length < 8) throw new Error("Пароль должен содержать минимум 8 символов.");
     const users = readUsers();
     if (users.some(user => user.email === email)) throw new Error("Аккаунт с такой почтой уже существует.");
@@ -82,6 +86,27 @@ export const authService = {
     if (target.email === APP_CONFIG.demoAdmin.email && role !== "admin") throw new Error("Нельзя изменить роль встроенного демо-администратора.");
     target.role = role; writeUsers(users);
     if (current.email === email) storage.write(APP_CONFIG.storageKeys.session, safeUser(target));
+    events.emit("users:changed", this.allUsers());
+  },
+
+  async deleteUser(email) {
+    const current = this.current();
+    if (current?.role !== "admin") throw new Error("Недостаточно прав.");
+    email = normalizeEmail(String(email ?? ""));
+    if (!email) throw new Error("Пользователь не найден.");
+    if (email === normalizeEmail(APP_CONFIG.demoAdmin.email)) {
+      throw new Error("Нельзя удалить встроенного демо-администратора.");
+    }
+    if (email === normalizeEmail(current.email)) {
+      throw new Error("Нельзя удалить аккаунт, под которым выполнен вход.");
+    }
+    const users = readUsers();
+    const targetIndex = users.findIndex(user => normalizeEmail(user.email) === email);
+    if (targetIndex === -1) throw new Error("Пользователь не найден.");
+    users.splice(targetIndex, 1);
+    if (!storage.write(APP_CONFIG.storageKeys.users, users)) {
+      throw new Error("Не удалось удалить пользователя из браузера.");
+    }
     events.emit("users:changed", this.allUsers());
   },
 

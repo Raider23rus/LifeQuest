@@ -2,6 +2,14 @@
 .nav-list .side-label{padding:14px 12px 3px;color:var(--muted)}
 .nav-section-items{display:contents}
 .sidebar,.main-area{transition:width 2.45s cubic-bezier(.22,1,.36,1),margin-left 2.45s cubic-bezier(.22,1,.36,1),padding 2.45s cubic-bezier(.22,1,.36,1)}
+.admin-user-actions{display:flex;gap:6px;flex-wrap:wrap}
+.admin-user-filters{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.admin-user-filters label{display:grid;gap:6px;color:var(--muted);font-size:11px;font-weight:700}
+.admin-user-search{flex:1 1 240px}
+.admin-user-role-filter{flex:0 1 200px}
+.admin-user-filters .field{width:100%;min-width:0}
+.admin-user-count{margin-left:auto;padding-bottom:12px;color:var(--muted);font-size:11px;white-space:nowrap}
+.profile-logout-actions{display:flex;justify-content:flex-start;margin-top:16px}
 .app-shell.sidebar-collapsed .sidebar{width:72px;padding:24px 8px 16px}
 .app-shell.sidebar-collapsed .brand{justify-content:center;padding:0 0 26px}
 .app-shell.sidebar-collapsed .brand>span:not(.brand-mark),
@@ -13,6 +21,7 @@
 .app-shell.sidebar-collapsed .user-mini{justify-content:center;padding:18px 0 0}
 @media(min-width:761px){.app-shell.sidebar-collapsed .main-area{width:calc(100% - 72px);margin-left:72px}}
 @media(prefers-reduced-motion:reduce){.sidebar,.main-area{transition:none}}
+@media(max-width:520px){.admin-user-search,.admin-user-role-filter{flex:1 1 100%}.admin-user-count{margin-left:0;padding-bottom:0}}
 .life-home-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0 0 20px}
 .life-home-grid .panel{margin:0}
 .life-home-grid .panel-heading{margin-bottom:12px}

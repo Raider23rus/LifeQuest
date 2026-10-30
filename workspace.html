@@ -6,17 +6,17 @@
   <meta name="description" content="LifeQuest — семейная платформа для целей, квестов и финансовой осознанности.">
   <title>LifeQuest — семейная система развития</title>
 
-  <!-- Guard ДО стилей и ДО app.js: нет сессии → мгновенный редирект -->
-  <script src="js/auth-guard.js"></script>
+  <!-- Модуль проверяет сессию до запуска app.js; auth-pending скрывает страницу до проверки. -->
+  <script type="module" src="js/auth-guard.js"></script>
   <noscript><meta http-equiv="refresh" content="0;url=index.html?auth=required"></noscript>
 
-  <script src="js/theme.js"></script>
+  <script type="module" src="js/theme.js"></script>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/family.css">
   <link rel="stylesheet" href="css/profile-ip.css">
   <link rel="stylesheet" href="css/life.css">
 </head>
-<body>
+<body class="auth-pending">
   <div id="app" class="app-shell">
     <aside class="sidebar" id="sidebar">
       <a class="brand" href="index.html"><span class="brand-mark">LQ</span><span>LifeQuest<small>Семейная система</small></span></a>
