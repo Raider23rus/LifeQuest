@@ -73,7 +73,8 @@ button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--blue),transparent 58%);outline-offset:3px}
 .sidebar{width:264px;padding:24px 16px 16px;background:var(--surface);box-shadow:4px 0 22px rgba(27,39,69,.025)}
 .brand{padding-bottom:26px}
-.brand-mark{border-radius:13px;background:linear-gradient(145deg,#6477f4,#5360d8);box-shadow:0 7px 16px #5667e833}
+.brand-mark img{display:block;width:100%;height:auto;object-fit:cover}
+.brand-mark{border-radius:13px;background:linear-gradient(145deg,#6477f4,#5360d8);box-shadow:0 7px 16px #5667e833;transition:background-color 0.3s}
 .side-label{padding:14px 12px 7px;color:var(--muted);font-size:9px;letter-spacing:1.15px}
 .nav-list{gap:3px}
 .nav-item{min-height:42px;padding:10px 12px;border-radius:9px;font-size:12px}
