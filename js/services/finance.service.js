@@ -10,6 +10,20 @@ const initial = [
 function save(items) { storage.write(APP_CONFIG.storageKeys.transactions, items); events.emit("finance:changed", items); return items; }
 export const financeService = {
   list() { return storage.read(APP_CONFIG.storageKeys.transactions, initial); },
+  
+  // Разделять операции на активы (положительные) и пассивы (отрицательные)
+  getBalances() {
+    const items = this.list();
+    const assets = items.filter(t => t.amount > 0);
+    const liabilities = items.filter(t => t.amount < 0);
+    
+    return {
+      totalAssets: assets.reduce((s, t) => s + t.amount, 0),
+      totalLiabilities: Math.abs(liabilities.reduce((s, t) => s + t.amount, 0)),
+      assets: assets.sort((a, b) => b.amount - a.amount),
+      liabilities: liabilities.sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount))
+    };
+  },
   add({ title, category, amount }) {
     title = String(title ?? "").trim(); if (!title) throw new Error("Укажи описание операции.");
     const numericAmount = Number(amount); if (!Number.isFinite(numericAmount) || numericAmount === 0) throw new Error("Сумма должна быть ненулевым числом.");

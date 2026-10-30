@@ -1,6 +1,27 @@
 import { APP_CONFIG } from "../config.js";
 import { authService } from "../services/auth.service.js";
 import { setPage, escapeHTML } from "../ui/render.js";
+import { ADMIN_REWARDS } from '../services/admin-rewards.service.js';
+
+// Функция для открытия модального окна покупки награды
+export function openRewardModal(userId) {
+  const rewardSelect = document.querySelector('#rewardForm select[name="rewardName"]');
+  rewardSelect.innerHTML = '';
+  
+  ADMIN_REWARDS.items.forEach(reward => {
+    const option = document.createElement('option');
+    option.value = reward.id;
+    option.textContent = `${reward.icon} ${reward.name} (${reward.rpValue} RP)`;
+    rewardSelect.appendChild(option);
+  });
+  
+  document.querySelector('#confirm-reward').addEventListener('click', () => {
+    // Вывод подтверждения через UI-компонент
+    alert(`Выдаём награду: ${rewardName}. Загружено очков на выдачу: ${ADMIN_REWARDS.getBalance(userId)}`);
+    
+    // Здесь должна быть логика отправки формы
+  });
+}
 
 export function renderAdmin(user, filters = {}) {
  if (user?.role !== "admin") {
