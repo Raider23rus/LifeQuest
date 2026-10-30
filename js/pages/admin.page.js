@@ -31,8 +31,9 @@ export function renderAdmin(user, filters = {}) {
      <td>
        <div class="admin-user-actions">
          <button class="table-action" data-role-email="${email}" data-role-next="${account.role === "admin" ? "member" : "admin"}">${account.role === "admin" ? "Сделать участником" : "Назначить админом"}</button>
-         ${protectedAccount ? "" : `<button class="table-action danger-action" data-delete-user="${email}">Удалить</button>`}
-       </div>
+           ${account.role === "member" ? `<button class="table-action" type="button" data-edit-user-credentials="${email}">Изменить email/пароль</button>` : ""}
+           ${protectedAccount ? "" : `<button class="table-action danger-action" data-delete-user="${email}">Удалить</button>`}
+         </div>
      </td>
    </tr>`;
  }).join("");
@@ -65,7 +66,18 @@ export function renderAdmin(user, filters = {}) {
            <label class="admin-user-role-filter"><span>Роль</span><select class="field" data-admin-user-role><option value="all" ${roleFilter === "all" ? "selected" : ""}>Все роли</option><option value="admin" ${roleFilter === "admin" ? "selected" : ""}>Администраторы</option><option value="member" ${roleFilter === "member" ? "selected" : ""}>Участники</option></select></label>
            <span class="admin-user-count" data-admin-user-count aria-live="polite">Показано ${matchingUsers} из ${users.length}</span>
          </div>
-         <div class="table-wrap" id="adminUserList"><table class="data-table"><thead><tr><th>Пользователь</th><th>Email</th><th>Роль</th><th>Действие</th></tr></thead><tbody>${userRows}<tr data-admin-user-empty ${matchingUsers ? "hidden" : ""}><td colspan="4" class="muted">Пользователи не найдены.</td></tr></tbody></table></div>` : `<p class="muted">В этом браузере пока нет зарегистрированных пользователей.</p>`}
+         <div class="table-wrap" id="adminUserList"><table class="data-table"><thead><tr><th>Пользователь</th><th>Email</th><th>Роль</th><th>Действие</th></tr></thead><tbody>${userRows}<tr data-admin-user-empty ${matchingUsers ? "hidden" : ""}><td colspan="4" class="muted">Пользователи не найдены.</td></tr></tbody></table></div>
+         <dialog class="life-quick-dialog" id="adminUserCredentialsDialog" aria-labelledby="adminUserCredentialsTitle">
+           <header class="life-quick-header"><div><h2 id="adminUserCredentialsTitle">Изменение данных пользователя</h2><p>Пароль администратора нельзя изменить из этой панели.</p></div><button class="life-quick-close" type="button" data-close-user-credentials aria-label="Закрыть">×</button></header>
+           <form class="life-quick-form" id="adminUserCredentialsForm">
+             <input type="hidden" name="currentEmail">
+             <label class="life-quick-field">Новая почта<input class="field" type="email" name="email" required autocomplete="off"></label>
+             <label class="life-quick-field" style="margin-top:14px">Новый пароль<input class="field" type="password" name="password" minlength="8" autocomplete="new-password" placeholder="Оставьте пустым, чтобы не менять"></label>
+             <label class="life-quick-field" style="margin-top:14px">Повторите новый пароль<input class="field" type="password" name="passwordConfirm" minlength="8" autocomplete="new-password"></label>
+             <p class="auth-error" data-admin-user-error role="alert"></p>
+             <footer class="life-quick-footer"><button class="life-quick-cancel" type="button" data-close-user-credentials>Отмена</button><button class="primary-button" type="submit">Сохранить</button></footer>
+           </form>
+         </dialog>` : `<p class="muted">В этом браузере пока нет зарегистрированных пользователей.</p>`}
        <p class="muted" style="font-size:10px;line-height:1.6;margin-top:15px">Показываются аккаунты, зарегистрированные в этом браузере и на этом адресе сайта. Другие браузеры и устройства не синхронизируются без серверной базы. Управление ролями здесь демонстрационное.</p>
      </section>`
  });

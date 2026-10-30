@@ -89,6 +89,32 @@ export const authService = {
     events.emit("users:changed", this.allUsers());
   },
 
+  async updateMemberCredentials({ currentEmail, email, password }) {
+    const current = this.current();
+    if (current?.role !== "admin") throw new Error("Недостаточно прав.");
+    currentEmail = normalizeEmail(String(currentEmail ?? ""));
+    email = normalizeEmail(String(email ?? ""));
+    password = String(password ?? "");
+    if (!currentEmail) throw new Error("Пользователь не найден.");
+    if (!isValidEmail(email)) throw new Error("Некорректная почта.");
+    if (password && password.length < 8) throw new Error("Пароль должен содержать минимум 8 символов.");
+
+    const users = readUsers();
+    const target = users.find(user => normalizeEmail(user.email) === currentEmail);
+    if (!target) throw new Error("Пользователь не найден.");
+    if (target.role === "admin") throw new Error("Нельзя менять почту или пароль администратора.");
+    if (email !== currentEmail && users.some(user => normalizeEmail(user.email) === email)) {
+      throw new Error("Этот email уже используется другим аккаунтом.");
+    }
+    if (!password && email === currentEmail) throw new Error("Изменений нет.");
+    target.email = email;
+    if (password) target.password = password;
+    if (!storage.write(APP_CONFIG.storageKeys.users, users)) {
+      throw new Error("Не удалось сохранить данные пользователя в браузере.");
+    }
+    events.emit("users:changed", this.allUsers());
+  },
+
   async deleteUser(email) {
     const current = this.current();
     if (current?.role !== "admin") throw new Error("Недостаточно прав.");

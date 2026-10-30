@@ -22,6 +22,29 @@ export function registerFormHandlers() {
   } catch(error){$("#authError").textContent=error.message;}
  });
  $("#pageContent").addEventListener("submit",async event=>{
+  if(event.target.id==="adminUserCredentialsForm"){
+   event.preventDefault();
+   const form=event.target;
+   const data=new FormData(form);
+   const errorEl=$("[data-admin-user-error]",form);
+   errorEl.textContent="";
+   const password=String(data.get("password")||"");
+   if(password!==String(data.get("passwordConfirm")||"")){
+    errorEl.textContent="Пароли не совпадают.";
+    return;
+   }
+   try{
+    await authService.updateMemberCredentials({
+     currentEmail:data.get("currentEmail"),
+     email:data.get("email"),
+     password
+    });
+    $("#adminUserCredentialsDialog").close();
+    render();
+    toast("Данные пользователя обновлены.");
+   }catch(error){errorEl.textContent=error.message;}
+   return;
+  }
   if(event.target.id==="profileForm"){event.preventDefault();const form=event.target;const data=new FormData(form);const errorEl=$("#profileError",form);const successEl=$("#profileSuccess",form);errorEl.textContent="";successEl.textContent="";try{const updated=await authService.updateProfile({firstName:data.get("firstName"),surname:data.get("surname"),patronymic:data.get("patronymic"),email:data.get("email")});renderProfile(updated);toast("Данные профиля обновлены.");}catch(error){errorEl.textContent=error.message;}return;}
   if(event.target.id==="passwordForm"){event.preventDefault();const form=event.target;const data=new FormData(form);const errorEl=$("#passwordError",form);const successEl=$("#passwordSuccess",form);errorEl.textContent="";successEl.textContent="";try{const newPassword=String(data.get("newPassword")||"");if(newPassword!==String(data.get("confirmPassword")||""))throw new Error("Новый пароль и подтверждение не совпадают.");await authService.changePassword({currentPassword:String(data.get("currentPassword")||""),newPassword});form.reset();successEl.textContent="Пароль успешно изменён.";toast("Пароль обновлён.");}catch(error){errorEl.textContent=error.message;}return;}
   if(event.target.id==="familyCreateForm"){event.preventDefault();const data=new FormData(event.target);try{familyService.create({name:data.get("name"),creator:authService.current()});toast("Семья создана. Ты назначен взрослым.");}catch(error){toast(error.message);}return;}
