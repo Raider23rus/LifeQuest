@@ -41,8 +41,7 @@ export function renderAdmin(user, filters = {}) {
  setPage({
    title: "Админ-панель",
    eyebrow: "УПРАВЛЕНИЕ ПЛАТФОРМОЙ",
-   html: `
-     <div class="admin-banner"><strong>Демо-панель.</strong> Это клиентский прототип. Проверка роли в браузере не является безопасной защитой: перед публикацией права должны проверяться сервером.</div>
+      html: `
      <div class="stats-grid">
        <article class="stat-card"><div class="stat-top">Всего аккаунтов <span class="stat-icon">♧</span></div><div class="stat-value">${users.length}</div><div class="stat-foot">В этом браузере</div></article>
        <article class="stat-card"><div class="stat-top">Администраторы <span class="stat-icon">⚙</span></div><div class="stat-value">${users.filter(account => account.role === "admin").length}</div><div class="stat-foot">Демо-роли</div></article>
